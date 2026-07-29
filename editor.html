@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTutor - Online Code Editor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+
+        <h1><a href="index.html">DevTutor</a> Online Editor</h1>
+
+        <nav>
+
+            <a href="index.html">Home</a>
+
+            <a href="tutorials.html">Tutorials</a>
+
+            <a href="html.html">HTML</a>
+
+            <a href="css.html">CSS</a>
+
+            <a href="javascript.html">JavaScript</a>
+
+        </nav>
+
+    </header>
+
+    <div class="container-editor">
+
+        <div class="editor-left">
+
+            <h2>HTML</h2>
+
+            <textarea id="html-code">
+
+<h1>Hello DevTutor!</h1>
+
+<p>This is my first webpage.</p>
+
+</textarea>
+
+            <h2>CSS</h2>
+
+            <textarea id="css-code">
+
+body{
+
+font-family:Arial;
+
+text-align:center;
+
+background:#f5f5f5;
+
+}
+
+h1{
+
+color:green;
+
+}
+
+p{
+
+color:#555;
+
+}
+
+</textarea>
+
+            <h2>JavaScript</h2>
+
+            <textarea id="js-code">
+
+console.log("Welcome!");
+
+</textarea>
+
+            <button onclick="runCode()">
+
+                ▶ Run Code
+
+            </button>
+
+        </div>
+
+        <div class="editor-right">
+
+            <iframe id="output"></iframe>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        <p>© 2026 DevTutor | Online Code Editor</p>
+
+    </footer>
+
+    <script>
+
+        function runCode() {
+
+            let html = document.getElementById("html-code").value;
+
+            let css = document.getElementById("css-code").value;
+
+            let js = document.getElementById("js-code").value;
+
+            let output = document.getElementById("output").contentWindow.document;
+
+            output.open();
+
+            output.write(
+
+                `
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<style>
+
+${css}
+
+</style>
+
+</head>
+
+<body>
+
+${html}
+
+<script>
+
+${js}
+
+<\/script>
+
+</body>
+
+</html>
+
+`
+
+            );
+
+            output.close();
+
+        }
+
+        runCode();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Tutorial - DevTutor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">DevTutor</a></h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="tutorials.html">Tutorials</a> |
+      <a href="html.html">HTML</a> |
+      <a href="css.html">CSS</a> |
+      <a href="javascript.html">JavaScript</a> |
+      <a href="react.html">React</a>
+    </nav>
+    <hr>
+  </header>
+  <table class="layout-table" width="100%" cellpadding="10">
+    <tr>
+      <td class="sidebar" width="22%" valign="top">
+        <h2>React Tutorial</h2>
+        <p><a href="#">React Home</a></p>
+        <p><a href="#intro">Introduction</a></p>
+        <p><a href="#setup">Setup</a></p>
+        <p><a href="#components">Components</a></p>
+        <p><a href="#state">State & Props</a></p>
+      </td>
+      <td class="main-content" valign="top">
+        <section id="intro">
+          <h2>React Overview</h2>
+          <p>React is a JavaScript library for building user interfaces using components and a virtual DOM.</p>
+        </section>
+        <section id="setup">
+          <h3>Setup</h3>
+          <p>Install Node.js and create a new React app using Create React App.</p>
+          <pre><code>npx create-react-app my-app
+cd my-app
+npm start</code></pre>
+        </section>
+        <section id="components">
+          <h3>Components</h3>
+          <p>Components are reusable pieces of UI defined as functions or classes.</p>
+          <pre><code>function Greeting(props) {
+  return <span>&lt;h1&gt;Hello, {props.name}!&lt;/h1&gt;</span>;
+}
+export default Greeting;</code></pre>
+        </section>
+        <section id="state">
+          <h3>State &amp; Props</h3>
+          <p>State holds component data. Props pass data from parent to child.</p>
+          <pre><code>import { useState } from "react";
+function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <span>&lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;Increment&lt;/button&gt;
+    &lt;/div&gt;</span>
+  );
+}
+export default Counter;</code></pre>
+        </section>
+        <br>
+        <button onclick="location.href='tutorials.html'">Back to Tutorials</button>
+      </td>
+    </tr>
+  </table>
+  <footer align="center">
+    <h3>DevTutor</h3>
+    <p>Learn React from Beginner to Advanced.</p>
+    <p>© 2026 DevTutor. All Rights Reserved.</p>
+  </footer>
+  <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+    <div class="card" style="padding:24px;">
+      <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — React</h2>
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div class="progress-bar" style="flex:1; min-width:200px;"><div class="progress" id="reactProgressBar" style="width:0%; transition:width 0.5s;"></div></div>
+        <span id="reactProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+        <input type="range" id="reactProgressSlider" min="0" max="100" step="5" value="0" style="width:160px; accent-color:#10b981; cursor:pointer;">
+        <button id="reactMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+      </div>
+      <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">Drag the slider to update your progress, or click "Mark Complete" to finish this course.</p>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+      if (!user) return;
+      var widget = document.getElementById("courseProgressWidget"); widget.style.display = "block";
+      var bar = document.getElementById("reactProgressBar"); var label = document.getElementById("reactProgressLabel"); var slider = document.getElementById("reactProgressSlider"); var markBtn = document.getElementById("reactMarkComplete");
+      var saved = (user.courseProgress && user.courseProgress["react"]) || 0;
+      slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+      slider.addEventListener("input", function () { var p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+      slider.addEventListener("change", function () { trackCourseProgress("react", parseInt(this.value), "React"); });
+      markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("react", 100, "React"); markBtn.textContent = "🎉 Completed!"; setTimeout(function() { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+    });
+  </script>
+</body>
+</html>

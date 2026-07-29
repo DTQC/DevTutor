@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Tutorial - DevTutor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1><a href="index.html">DevTutor</a></h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="tutorials.html">Tutorials</a> |
+            <a href="editor.html">Try Editor</a>
+        </nav>
+        <hr>
+    </header>
+    <!-- Layout -->
+    <table class="layout-table" width="100%" cellpadding="10">
+        <tr>
+            <!-- Sidebar -->
+            <td class="sidebar" width="22%" valign="top">
+                <h2>MySQL Tutorial</h2>
+                <hr>
+                <p><a href="#introduction">Introduction</a></p>
+                <p><a href="#install">Installation</a></p>
+                <p><a href="#queries">Sample Queries</a></p>
+                <p><a href="#exercise">Exercise</a></p>
+            </td>
+            <!-- Main Content -->
+            <td class="main-content" valign="top">
+                <h1>MySQL Tutorial</h1>
+                <section id="introduction">
+                    <h2>Introduction</h2>
+                    <p>MySQL is a popular open‑source relational database. It is used to store and retrieve structured data for web applications.</p>
+                </section>
+                <section id="install">
+                    <h2>Installation</h2>
+                    <p>Download the MySQL Community Server from <a href="https://dev.mysql.com/downloads/mysql/" target="_blank">dev.mysql.com</a> and follow the installer steps.</p>
+                    <p>Verify the installation:</p>
+                    <pre><code>mysql --version</code></pre>
+                </section>
+                <section id="queries">
+                    <h2>Sample Queries</h2>
+                    <p>Create a sample database and table:</p>
+                    <pre><code>CREATE DATABASE devtutor;
+USE devtutor;
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL
+);
+INSERT INTO books (title, author) VALUES
+    ('The Pragmatic Programmer', 'Andrew Hunt'),
+    ('Clean Code', 'Robert C. Martin');
+SELECT * FROM books;</code></pre>
+                </section>
+                <section id="exercise">
+                    <h2>Exercise</h2>
+                    <p>Extend the <code>books</code> table with a new column <code>year INT</code>, insert a few rows, and write a query that returns books published after 2010.</p>
+                </section>
+                <hr>
+                <button>Try It Yourself</button>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <footer align="center">
+        <h3>DevTutor</h3>
+        <p>Learn Coding Anywhere, Anytime.</p>
+        <p>© 2026 DevTutor. All Rights Reserved.</p>
+    </footer>
+    <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+        <div class="card" style="padding:24px;">
+            <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — MySQL</h2>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="progress-bar" style="flex:1; min-width:200px;"><div class="progress" id="mysqlProgressBar" style="width:0%; transition:width 0.5s;"></div></div>
+                <span id="mysqlProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+                <input type="range" id="mysqlProgressSlider" min="0" max="100" step="5" value="0" style="width:160px; accent-color:#10b981; cursor:pointer;">
+                <button id="mysqlMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+            </div>
+            <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">Drag the slider to update your progress, or click "Mark Complete" to finish this course.</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+            if (!user) return;
+            var widget = document.getElementById("courseProgressWidget"); widget.style.display = "block";
+            var bar = document.getElementById("mysqlProgressBar"); var label = document.getElementById("mysqlProgressLabel"); var slider = document.getElementById("mysqlProgressSlider"); var markBtn = document.getElementById("mysqlMarkComplete");
+            var saved = (user.courseProgress && user.courseProgress["mysql"]) || 0;
+            slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+            slider.addEventListener("input", function () { var p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+            slider.addEventListener("change", function () { trackCourseProgress("mysql", parseInt(this.value), "MySQL"); });
+            markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("mysql", 100, "MySQL"); markBtn.textContent = "🎉 Completed!"; setTimeout(function() { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+        });
+    </script>
+</body>
+</html>

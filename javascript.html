@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Tutorial - DevTutor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="index.html">DevTutor</a></h1>
+
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="tutorials.html">Tutorials</a> |
+            <a href="html.html">HTML</a> |
+            <a href="css.html">CSS</a> |
+            <a href="javascript.html">JavaScript</a>
+        </nav>
+
+        <hr>
+    </header>
+
+    <table class="layout-table" width="100%" cellpadding="10">
+
+        <tr>
+
+            <!-- Sidebar -->
+            <td class="sidebar" width="22%" valign="top">
+
+                <h2>JavaScript Tutorial</h2>
+
+                <hr>
+
+                <p><a href="#">JavaScript Home</a></p>
+                <p><a href="#">JS Introduction</a></p>
+                <p><a href="#">JS Output</a></p>
+                <p><a href="#">JS Variables</a></p>
+                <p><a href="#">JS Data Types</a></p>
+                <p><a href="#">JS Operators</a></p>
+                <p><a href="#">JS Functions</a></p>
+                <p><a href="#">JS Events</a></p>
+                <p><a href="#">JS Conditions</a></p>
+                <p><a href="#">JS Loops</a></p>
+                <p><a href="#">JS Arrays</a></p>
+                <p><a href="#">JS Objects</a></p>
+                <p><a href="#">JS Strings</a></p>
+                <p><a href="#">JS Numbers</a></p>
+                <p><a href="#">JS Math</a></p>
+                <p><a href="#">JS Date</a></p>
+                <p><a href="#">JS DOM</a></p>
+                <p><a href="#">JS Forms</a></p>
+                <p><a href="#">JS Animation</a></p>
+                <p><a href="#">JS Fetch API</a></p>
+                <p><a href="#">JS JSON</a></p>
+
+            </td>
+
+            <!-- Main Content -->
+            <td class="main-content" valign="top">
+
+                <h1>JavaScript Tutorial</h1>
+
+                <p>
+                    <strong>JavaScript</strong> is the programming language of the web.
+                    It makes web pages interactive by responding to user actions,
+                    changing content, validating forms, and much more.
+                </p>
+
+                <hr>
+
+                <h2>What You Will Learn</h2>
+
+                <ul>
+                    <li>Variables</li>
+                    <li>Functions</li>
+                    <li>Conditions</li>
+                    <li>Loops</li>
+                    <li>Arrays & Objects</li>
+                    <li>DOM Manipulation</li>
+                    <li>Events</li>
+                    <li>Fetch API</li>
+                </ul>
+
+                <hr>
+
+                <h2>JavaScript Example</h2>
+
+                <textarea rows="16" cols="80">
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2 id="demo">Welcome!</h2>
+
+<button onclick="changeText()">
+Click Me
+</button>
+
+<script>
+
+    function changeText() {
+
+        document.getElementById("demo").innerHTML =
+            "Welcome to DevTutor!";
+
+    }
+
+</script>
+
+</body>
+</html>
+</textarea>
+
+                <br><br>
+
+                <button>Try It Yourself</button>
+
+                <hr>
+
+                <h2>JavaScript Variables</h2>
+
+                <pre>
+let name = "John";
+const age = 20;
+
+console.log(name);
+console.log(age);
+</pre>
+
+                <hr>
+
+                <h2>JavaScript Functions</h2>
+
+                <pre>
+function greet(name){
+
+    return "Hello " + name;
+
+}
+
+console.log(greet("Alice"));
+</pre>
+
+                <hr>
+
+                <h2>JavaScript Conditions</h2>
+
+                <pre>
+let score = 90;
+
+if(score >= 75){
+
+    console.log("Passed");
+
+}else{
+
+    console.log("Failed");
+
+}
+</pre>
+
+                <hr>
+
+                <h2>JavaScript Loop</h2>
+
+                <pre>
+for(let i=1; i<=5; i++){
+
+    console.log(i);
+
+}
+</pre>
+
+                <hr>
+
+                <h2>JavaScript Array</h2>
+
+                <pre>
+let fruits = [
+
+"Apple",
+"Banana",
+"Orange"
+
+];
+
+console.log(fruits[0]);
+</pre>
+
+                <hr>
+
+                <h2>Example Output</h2>
+
+                <div style="padding:20px;border:1px solid #ccc;background:#f5f5f5;">
+
+                    <h2 id="demoOutput">Welcome!</h2>
+
+                    <button onclick="changeExample()">
+                        Click Me
+                    </button>
+
+                </div>
+
+                <script>
+
+                    function changeExample() {
+
+                        document.getElementById("demoOutput").innerHTML =
+                            "Welcome to DevTutor!";
+
+                    }
+
+                </script>
+
+                <hr>
+
+                <h2>Common JavaScript Methods</h2>
+
+                <table border="1" cellpadding="10">
+
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+
+                    <tr>
+                        <td>alert()</td>
+                        <td>Shows a popup message</td>
+                    </tr>
+
+                    <tr>
+                        <td>console.log()</td>
+                        <td>Displays output in the console</td>
+                    </tr>
+
+                    <tr>
+                        <td>getElementById()</td>
+                        <td>Selects an HTML element</td>
+                    </tr>
+
+                    <tr>
+                        <td>querySelector()</td>
+                        <td>Selects an element using CSS selectors</td>
+                    </tr>
+
+                    <tr>
+                        <td>addEventListener()</td>
+                        <td>Adds an event listener</td>
+                    </tr>
+
+                    <tr>
+                        <td>setTimeout()</td>
+                        <td>Runs code after a delay</td>
+                    </tr>
+
+                    <tr>
+                        <td>fetch()</td>
+                        <td>Retrieves data from an API</td>
+                    </tr>
+
+                    <tr>
+                        <td>JSON.parse()</td>
+                        <td>Converts JSON into an object</td>
+                    </tr>
+
+                </table>
+
+                <hr>
+
+                <h2>Practice Exercise</h2>
+
+                <p>Create a webpage that includes:</p>
+
+                <ol>
+                    <li>A heading</li>
+                    <li>A button</li>
+                    <li>When the button is clicked, change the heading text.</li>
+                    <li>Display an alert message.</li>
+                </ol>
+
+                <hr>
+
+                <table width="100%">
+                    <tr>
+
+                        <td align="left">
+                            <button onclick="location.href='css.html'">
+                                ← Previous
+                            </button>
+                        </td>
+
+                        <td align="right">
+                            <button onclick="location.href='python.html'">
+                                Next →
+                            </button>
+                        </td>
+
+                    </tr>
+                </table>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <footer align="center">
+
+        <h3>DevTutor</h3>
+
+        <p>Learn JavaScript from Beginner to Advanced.</p>
+
+        <p>© 2026 DevTutor. All Rights Reserved.</p>
+
+    </footer>
+
+    <!-- Course Progress Tracker -->
+    <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+        <div class="card" style="padding:24px;">
+            <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — JavaScript</h2>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="progress-bar" style="flex:1; min-width:200px;"><div class="progress" id="jsProgressBar" style="width:0%; transition:width 0.5s;">0%</div></div>
+                <span id="jsProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+                <input type="range" id="jsProgressSlider" min="0" max="100" step="5" value="0" style="width:160px; accent-color:#10b981; cursor:pointer;">
+                <button id="jsMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+            </div>
+            <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">Drag the slider to update your progress, or click "Mark Complete" to finish this course.</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+            if (!user) return;
+            const widget = document.getElementById("courseProgressWidget");
+            const bar = document.getElementById("jsProgressBar"); const label = document.getElementById("jsProgressLabel"); const slider = document.getElementById("jsProgressSlider"); const markBtn = document.getElementById("jsMarkComplete");
+            widget.style.display = "block";
+            const saved = (user.courseProgress && user.courseProgress["javascript"]) || 0;
+            slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+            slider.addEventListener("input", function () { const p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+            slider.addEventListener("change", function () { trackCourseProgress("javascript", parseInt(this.value), "JavaScript"); });
+            markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("javascript", 100, "JavaScript"); markBtn.textContent = "🎉 Completed!"; setTimeout(() => { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+        });
+    </script>
+</body>
+
+</html>

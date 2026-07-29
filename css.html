@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Tutorial - DevTutor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="index.html">DevTutor</a></h1>
+
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="tutorials.html">Tutorials</a> |
+            <a href="html.html">HTML</a> |
+            <a href="css.html">CSS</a> |
+            <a href="javascript.html">JavaScript</a>
+        </nav>
+
+        <hr>
+    </header>
+
+    <table class="layout-table" width="100%" cellpadding="10">
+
+        <tr>
+
+            <!-- Sidebar -->
+            <td class="sidebar" width="22%" valign="top">
+
+                <h2>CSS Tutorial</h2>
+
+                <hr>
+
+                <p><a href="#">CSS Home</a></p>
+                <p><a href="#">CSS Introduction</a></p>
+                <p><a href="#">CSS Syntax</a></p>
+                <p><a href="#">CSS Selectors</a></p>
+                <p><a href="#">CSS Colors</a></p>
+                <p><a href="#">CSS Backgrounds</a></p>
+                <p><a href="#">CSS Borders</a></p>
+                <p><a href="#">CSS Margins</a></p>
+                <p><a href="#">CSS Padding</a></p>
+                <p><a href="#">CSS Height & Width</a></p>
+                <p><a href="#">CSS Box Model</a></p>
+                <p><a href="#">CSS Text</a></p>
+                <p><a href="#">CSS Fonts</a></p>
+                <p><a href="#">CSS Links</a></p>
+                <p><a href="#">CSS Lists</a></p>
+                <p><a href="#">CSS Tables</a></p>
+                <p><a href="#">CSS Display</a></p>
+                <p><a href="#">CSS Position</a></p>
+                <p><a href="#">CSS Flexbox</a></p>
+                <p><a href="#">CSS Grid</a></p>
+                <p><a href="#">CSS Animations</a></p>
+                <p><a href="#">CSS Responsive Design</a></p>
+
+            </td>
+
+            <!-- Main Content -->
+            <td class="main-content" valign="top">
+
+                <h1>CSS Tutorial</h1>
+
+                <p>
+                    <strong>CSS (Cascading Style Sheets)</strong> is the language used to style HTML
+                    web pages. It controls colors, fonts, spacing, layouts, animations, and more.
+                </p>
+
+                <hr>
+
+                <h2>What You Will Learn</h2>
+
+                <ul>
+                    <li>CSS Syntax</li>
+                    <li>Colors and Backgrounds</li>
+                    <li>Fonts and Text Styling</li>
+                    <li>Margins and Padding</li>
+                    <li>Flexbox and Grid</li>
+                    <li>Responsive Web Design</li>
+                </ul>
+
+                <hr>
+
+                <h2>CSS Example</h2>
+
+                <textarea rows="15" cols="80">
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+body{
+    background:#f5f5f5;
+    font-family:Arial;
+}
+
+h1{
+    color:green;
+}
+
+p{
+    color:#555;
+    font-size:18px;
+}
+
+button{
+    background:green;
+    color:white;
+    padding:10px 20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Welcome to DevTutor</h1>
+
+<p>Learning CSS is fun!</p>
+
+<button>Click Me</button>
+
+</body>
+</html>
+</textarea>
+
+                <br><br>
+
+                <button>Try It Yourself</button>
+
+                <hr>
+
+                <h2>CSS Syntax</h2>
+
+                <pre>
+selector {
+
+    property: value;
+
+}
+</pre>
+
+                Example:
+
+                <pre>
+h1{
+
+    color: blue;
+
+    font-size:40px;
+
+}
+</pre>
+
+                <hr>
+
+                <h2>Example Output</h2>
+
+                <div style="background:#f5f5f5;padding:20px;border:1px solid #ccc;">
+                    <h1 style="color:green;">Welcome to DevTutor</h1>
+
+                    <p style="font-size:18px;color:#555;">
+                        Learning CSS is fun!
+                    </p>
+
+                    <button style="background:green;color:white;padding:10px 20px;border:none;">
+                        Click Me
+                    </button>
+                </div>
+
+                <hr>
+
+                <h2>Common CSS Properties</h2>
+
+                <table border="1" cellpadding="10">
+
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                    </tr>
+
+                    <tr>
+                        <td>color</td>
+                        <td>Changes text color</td>
+                    </tr>
+
+                    <tr>
+                        <td>background</td>
+                        <td>Changes background color</td>
+                    </tr>
+
+                    <tr>
+                        <td>font-size</td>
+                        <td>Sets text size</td>
+                    </tr>
+
+                    <tr>
+                        <td>font-family</td>
+                        <td>Changes font style</td>
+                    </tr>
+
+                    <tr>
+                        <td>margin</td>
+                        <td>Outer spacing</td>
+                    </tr>
+
+                    <tr>
+                        <td>padding</td>
+                        <td>Inner spacing</td>
+                    </tr>
+
+                    <tr>
+                        <td>border</td>
+                        <td>Adds borders</td>
+                    </tr>
+
+                    <tr>
+                        <td>display</td>
+                        <td>Controls element display</td>
+                    </tr>
+
+                    <tr>
+                        <td>flex</td>
+                        <td>Flexible layouts</td>
+                    </tr>
+
+                    <tr>
+                        <td>grid</td>
+                        <td>Grid layouts</td>
+                    </tr>
+
+                </table>
+
+                <hr>
+
+                <h2>Practice Exercise</h2>
+
+                <p>Create a webpage that includes:</p>
+
+                <ol>
+                    <li>A blue heading</li>
+                    <li>A gray paragraph</li>
+                    <li>A green button</li>
+                    <li>A light background color</li>
+                </ol>
+
+                <hr>
+
+                <table width="100%">
+                    <tr>
+
+                        <td align="left">
+                            <button onclick="location.href='html.html'">
+                                ← Previous
+                            </button>
+                        </td>
+
+                        <td align="right">
+                            <button onclick="location.href='javascript.html'">
+                                Next →
+                            </button>
+                        </td>
+
+                    </tr>
+                </table>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <footer align="center">
+
+        <h3>DevTutor</h3>
+
+        <p>Learn CSS from Beginner to Advanced.</p>
+
+        <p>© 2026 DevTutor. All Rights Reserved.</p>
+
+    </footer>
+
+    <!-- Course Progress Tracker (only visible when logged in) -->
+    <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+        <div class="card" style="padding:24px;">
+            <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — CSS</h2>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="progress-bar" style="flex:1; min-width:200px;">
+                    <div class="progress" id="cssProgressBar" style="width:0%; transition:width 0.5s;">0%</div>
+                </div>
+                <span id="cssProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+                <input type="range" id="cssProgressSlider" min="0" max="100" step="5" value="0"
+                       style="width:160px; accent-color:#10b981; cursor:pointer;">
+                <button id="cssMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+            </div>
+            <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">
+                Drag the slider to update your progress, or click "Mark Complete" to finish this course.
+            </p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+            if (!user) return;
+            const widget = document.getElementById("courseProgressWidget");
+            const bar = document.getElementById("cssProgressBar");
+            const label = document.getElementById("cssProgressLabel");
+            const slider = document.getElementById("cssProgressSlider");
+            const markBtn = document.getElementById("cssMarkComplete");
+            widget.style.display = "block";
+            const saved = (user.courseProgress && user.courseProgress["css"]) || 0;
+            slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+            slider.addEventListener("input", function () { const p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+            slider.addEventListener("change", function () { trackCourseProgress("css", parseInt(this.value), "CSS"); });
+            markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("css", 100, "CSS"); markBtn.textContent = "🎉 Completed!"; setTimeout(() => { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+        });
+    </script>
+</body>
+
+</html>

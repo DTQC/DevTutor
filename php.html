@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Tutorial - DevTutor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">DevTutor</a></h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="tutorials.html">Tutorials</a> |
+            <a href="html.html">HTML</a> |
+            <a href="css.html">CSS</a> |
+            <a href="javascript.html">JavaScript</a> |
+            <a href="php.html">PHP</a>
+        </nav>
+        <hr>
+    </header>
+    <table class="layout-table" width="100%" cellpadding="10">
+        <tr>
+            <td class="sidebar" width="22%" valign="top">
+                <h2>PHP Tutorial</h2>
+                <p><a href="#">PHP Home</a></p>
+                <p><a href="#">PHP Introduction</a></p>
+                <p><a href="#">PHP Syntax</a></p>
+                <p><a href="#">PHP Variables</a></p>
+                <p><a href="#">PHP Control Structures</a></p>
+                <p><a href="#">PHP Functions</a></p>
+                <p><a href="#">PHP Forms</a></p>
+                <p><a href="#">PHP MySQL</a></p>
+                <p><a href="#">PHP Sessions</a></p>
+            </td>
+            <td class="main-content" valign="top">
+                <h1>PHP Tutorial</h1>
+                <p><strong>PHP</strong> is a server‑side scripting language widely used for web development.</p>
+                <h2>What You Will Learn</h2>
+                <ul>
+                    <li>Basic syntax and embedding PHP in HTML</li>
+                    <li>Variables and data types</li>
+                    <li>Control structures (if, for, while)</li>
+                    <li>Functions and include files</li>
+                    <li>Handling forms and user input</li>
+                    <li>Connecting to MySQL databases</li>
+                </ul>
+                <h2>PHP Example</h2>
+                <textarea rows="12" cols="80"><!DOCTYPE html>
+<html>
+<head><title>PHP Demo</title></head>
+<body>
+<?php
+    $name = "World";
+    echo "<h2>Hello, $name!</h2>";
+?>
+</body>
+</html></textarea>
+                <br><br>
+                <button>Try It Yourself</button>
+                <hr>
+                <h2>PHP Variables</h2>
+                <pre>
+<?php
+    $string = "Hello"; // string
+    $int = 42;         // integer
+    $float = 3.14;     // float
+    $bool = true;      // boolean
+    echo $string . " " . $int;
+?>
+                </pre>
+                <hr>
+                <h2>PHP Control Structures</h2>
+                <pre>
+<?php
+    $score = 85;
+    if ($score >= 75) {
+        echo "Passed";
+    } else {
+        echo "Failed";
+    }
+?>
+                </pre>
+                <hr>
+                <h2>Practice Exercise</h2>
+                <p>Create a PHP page that receives a name from a form and greets the user.</p>
+            </td>
+        </tr>
+    </table>
+    <footer align="center">
+        <h3>DevTutor</h3>
+        <p>Learn PHP from Beginner to Advanced.</p>
+        <p>© 2026 DevTutor. All Rights Reserved.</p>
+    </footer>
+    <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+        <div class="card" style="padding:24px;">
+            <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — PHP</h2>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="progress-bar" style="flex:1; min-width:200px;"><div class="progress" id="phpProgressBar" style="width:0%; transition:width 0.5s;"></div></div>
+                <span id="phpProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+                <input type="range" id="phpProgressSlider" min="0" max="100" step="5" value="0" style="width:160px; accent-color:#10b981; cursor:pointer;">
+                <button id="phpMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+            </div>
+            <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">Drag the slider to update your progress, or click "Mark Complete" to finish this course.</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+            if (!user) return;
+            var widget = document.getElementById("courseProgressWidget"); widget.style.display = "block";
+            var bar = document.getElementById("phpProgressBar"); var label = document.getElementById("phpProgressLabel"); var slider = document.getElementById("phpProgressSlider"); var markBtn = document.getElementById("phpMarkComplete");
+            var saved = (user.courseProgress && user.courseProgress["php"]) || 0;
+            slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+            slider.addEventListener("input", function () { var p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+            slider.addEventListener("change", function () { trackCourseProgress("php", parseInt(this.value), "PHP"); });
+            markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("php", 100, "PHP"); markBtn.textContent = "🎉 Completed!"; setTimeout(function() { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+        });
+    </script>
+</body>
+</html>

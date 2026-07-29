@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - DevTutor</title>
+    <meta name="description" content="Your personal DevTutor learning dashboard. Track your course progress, certificates, and recent activity.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- auth.js loads Firebase SDK dynamically; defer ensures DOM is ready first -->
+    <script src="auth.js" defer></script>
+    <style>
+        /* Hide page until Firebase auth is confirmed — prevents content flash */
+        body { visibility: hidden; }
+        /* Dashboard-specific overrides */
+        .progress-bar {
+            position: relative;
+        }
+
+        .progress {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 0;
+        }
+
+        .progress-zero {
+            min-width: 0 !important;
+            width: 0% !important;
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-in-progress {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .badge-not-started {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 28px;
+            margin-top: 18px;
+        }
+
+        .empty-activity {
+            text-align: center;
+            padding: 20px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .empty-activity span {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .cert-empty {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 8px 0;
+        }
+
+        #editProfileModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #editProfileModal.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-hover);
+            border-radius: 16px;
+            padding: 36px;
+            width: 420px;
+            max-width: 90vw;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            background: none;
+            -webkit-text-fill-color: initial;
+            color: var(--text-primary);
+        }
+
+        .modal-box label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 11px 15px;
+            background: #0b0f19;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .modal-box input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: var(--text-secondary) !important;
+            border: 1px solid var(--border) !important;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        #modalError {
+            color: #f87171;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .activity-time {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .activity li {
+            display: flex;
+            align-items: center;
+        }
+
+        .course-prog-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .course-prog-fill {
+            height: 100%;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--accent-primary), #34d399);
+            transition: width 0.8s ease;
+        }
+        /* Loading spinner shown before auth resolves */
+        .dt-loading {
+            position: fixed; inset: 0; display: flex; align-items: center;
+            justify-content: center; background: var(--bg-global); z-index: 9999;
+            flex-direction: column; gap: 16px;
+        }
+        .dt-spinner {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(16,185,129,0.15);
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .dt-loading p { color: var(--text-muted); font-size: 0.9rem; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Loading overlay -->
+    <div class="dt-loading" id="loadingOverlay">
+        <div class="dt-spinner"></div>
+        <p>Loading your dashboard…</p>
+    </div>
+
+    <header>
+        <h1><a href="index.html">DevTutor</a> Dashboard</h1>
+        <nav id="mainNav">
+            <!-- Populated by auth.js -->
+        </nav>
+    </header>
+
+    <div class="container" id="dashboardContent" style="opacity:0; transition: opacity 0.4s ease;">
+
+        <!-- Top row: Profile + Progress + Certificates -->
+        <div class="cards">
+
+            <!-- Profile Card -->
+            <div class="card" id="profileCard">
+                <h2>👤 Profile</h2>
+                <p><strong>Name:</strong> <span id="userName">—</span></p>
+                <p><strong>Email:</strong> <span id="userEmail">—</span></p>
+                <p><strong>Member Since:</strong> <span id="userJoined">—</span></p>
+                <div class="stat-row">
+                    <div>
+                        <div class="stat-number" id="statCoursesStarted">0</div>
+                        <div class="stat-label">Courses Started</div>
+                    </div>
+                    <div>
+                        <div class="stat-number" id="statCoursesCompleted">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div>
+                        <div class="stat-number" id="statCerts">0</div>
+                        <div class="stat-label">Certificates</div>
+                    </div>
+                </div>
+                <button id="editProfileBtn" style="margin-top: 20px; width: 100%;">Edit Profile</button>
+            </div>
+
+            <!-- Learning Progress Card -->
+            <div class="card">
+                <h2>📊 Learning Progress</h2>
+                <p>You have completed <strong id="overallPct">0%</strong> of your learning path.</p>
+                <div class="progress-bar">
+                    <div class="progress" id="overallBar" style="width: 0%;">0%</div>
+                </div>
+                <p style="margin-top: 20px; margin-bottom: 6px;">Courses breakdown:</p>
+                <div id="courseBreakdown">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+
+            <!-- Certificates Card -->
+            <div class="card">
+                <h2>🏆 Certificates</h2>
+                <p>Certificates Earned:</p>
+                <ul id="certList">
+                    <!-- Filled dynamically -->
+                </ul>
+                <button id="downloadCertBtn" style="margin-top: 20px; width: 100%;">Download Certificate</button>
+            </div>
+
+        </div>
+
+        <br>
+
+        <!-- Course Progress Table -->
+        <div class="card">
+            <h2>📚 Course Progress</h2>
+            <table id="courseTable">
+                <tr>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th>Progress</th>
+                    <th>Action</th>
+                </tr>
+                <!-- Filled dynamically -->
+            </table>
+        </div>
+
+        <br>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <h2>⏱ Recent Activity</h2>
+            <ul class="activity" id="activityList">
+                <!-- Filled dynamically -->
+            </ul>
+        </div>
+
+        <br>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h2>🚀 Quick Actions</h2>
+            <button onclick="location.href='tutorials.html'">Continue Learning</button>
+            <button onclick="location.href='editor.html'" style="margin-left: 12px;">Open Code Editor</button>
+        </div>
+
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box">
+            <h2 id="modalTitle">✏️ Edit Profile</h2>
+            <label for="editName">Full Name</label>
+            <input type="text" id="editName" placeholder="Your full name">
+            <label for="editEmail">Email Address</label>
+            <input type="email" id="editEmail" placeholder="Your email">
+            <label for="editCurrentPassword">Current Password (required to save)</label>
+            <input type="password" id="editCurrentPassword" placeholder="Current password">
+            <label for="editNewPassword">New Password <span style="color:var(--text-muted); font-weight:400;">(leave blank to keep current)</span></label>
+            <input type="password" id="editNewPassword" placeholder="New password">
+            <div id="modalError"></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelEditBtn">Cancel</button>
+                <button id="saveProfileBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 DevTutor | Learn Programming Anytime, Anywhere.</p>
+    </footer>
+
+    <script>
+    // ================================================================
+    //  Dashboard – Firebase-powered rendering
+    //  Data comes from Firestore via devtutor:authReady event (auth.js)
+    // ================================================================
+
+    const ALL_COURSES = [
+        { key: "html",       label: "HTML",       href: "html.html"       },
+        { key: "css",        label: "CSS",        href: "css.html"        },
+        { key: "javascript", label: "JavaScript", href: "javascript.html" },
+        { key: "bootstrap",  label: "Bootstrap",  href: "bootstrap.html"  },
+        { key: "react",      label: "React",      href: "react.html"      },
+        { key: "php",        label: "PHP",        href: "php.html"        },
+        { key: "python",     label: "Python",     href: "python.html"     },
+        { key: "nodejs",     label: "Node.js",    href: "nodejs.html"     },
+        { key: "sql",        label: "SQL",        href: "sql.html"        },
+        { key: "mysql",      label: "MySQL",      href: "mysql.html"      },
+    ];
+
+    // ── Current user data (Firestore) ──────────────────────────
+    let _dashUser  = null;
+    let _dashFbUser = null;
+
+    function getStatusLabel(pct) {
+        if (pct >= 100) return { label: "Completed",   cls: "badge-completed"   };
+        if (pct > 0)    return { label: "In Progress", cls: "badge-in-progress" };
+        return               { label: "Not Started",  cls: "badge-not-started" };
+    }
+
+    function renderDashboard(user) {
+        if (!user) { window.location.href = "index.html#auth-section"; return; }
+        _dashUser = user;
+
+        const cp       = user.courseProgress || {};
+        ALL_COURSES.forEach(c => { if (cp[c.key] === undefined) cp[c.key] = 0; });
+        const activity = user.activity || [];
+
+        // Profile
+        document.getElementById("userName").textContent   = user.name   || "—";
+        document.getElementById("userEmail").textContent  = user.email  || "—";
+        document.getElementById("userJoined").textContent = user.joined || "—";
+
+        const started   = ALL_COURSES.filter(c => cp[c.key] > 0).length;
+        const completed = ALL_COURSES.filter(c => cp[c.key] >= 100).length;
+        document.getElementById("statCoursesStarted").textContent  = started;
+        document.getElementById("statCoursesCompleted").textContent = completed;
+        document.getElementById("statCerts").textContent            = completed;
+
+        // Overall progress bar
+        const sumPct     = ALL_COURSES.reduce((s, c) => s + (cp[c.key] || 0), 0);
+        const overallPct = ALL_COURSES.length > 0 ? Math.round(sumPct / ALL_COURSES.length) : 0;
+        document.getElementById("overallPct").textContent = overallPct + "%";
+        const bar = document.getElementById("overallBar");
+        bar.style.width  = overallPct + "%";
+        bar.textContent  = overallPct > 0 ? overallPct + "%" : "";
+        if (overallPct === 0) bar.style.minWidth = "0";
+
+        // Breakdown mini-bars
+        const breakdown = document.getElementById("courseBreakdown");
+        breakdown.innerHTML = "";
+        ALL_COURSES.forEach(c => {
+            const pct = cp[c.key] || 0;
+            const row = document.createElement("div");
+            row.style.cssText = "display:flex;align-items:center;gap:10px;margin-bottom:8px;";
+            row.innerHTML = `
+                <span style="width:80px;font-size:0.82rem;color:var(--text-secondary);flex-shrink:0;">${c.label}</span>
+                <div class="course-prog-bar" style="flex:1;">
+                    <div class="course-prog-fill" style="width:${pct}%;"></div>
+                </div>
+                <span style="width:36px;text-align:right;font-size:0.82rem;color:var(--text-muted);">${pct}%</span>
+            `;
+            breakdown.appendChild(row);
+        });
+
+        // Certificates
+        const certList    = document.getElementById("certList");
+        certList.innerHTML = "";
+        const earnedCerts = ALL_COURSES.filter(c => cp[c.key] >= 100);
+        if (earnedCerts.length === 0) {
+            certList.innerHTML = `<li style="list-style:none;padding-left:0;"><span class="cert-empty">No certificates yet — complete a course to earn one! 🎯</span></li>`;
+        } else {
+            earnedCerts.forEach(c => {
+                const li = document.createElement("li");
+                li.textContent = "✅ " + c.label;
+                certList.appendChild(li);
+            });
+            ALL_COURSES.filter(c => cp[c.key] > 0 && cp[c.key] < 100).forEach(c => {
+                const li = document.createElement("li");
+                li.textContent = "⬜ " + c.label + " (In Progress)";
+                certList.appendChild(li);
+            });
+        }
+
+        // Course progress table
+        const table = document.getElementById("courseTable");
+        while (table.rows.length > 1) table.deleteRow(1);
+        ALL_COURSES.forEach(c => {
+            const pct = cp[c.key] || 0;
+            const { label: statusLabel, cls } = getStatusLabel(pct);
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td><a href="${c.href}" style="color:var(--text-primary);font-weight:500;">${c.label}</a></td>
+                <td><span class="course-badge ${cls}">${statusLabel}</span></td>
+                <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="course-prog-bar" style="flex:1;height:10px;">
+                            <div class="course-prog-fill" style="width:${pct}%;"></div>
+                        </div>
+                        <span style="font-size:0.85rem;color:var(--text-muted);width:34px;text-align:right;">${pct}%</span>
+                    </div>
+                </td>
+                <td>
+                    <a href="${c.href}"><button style="padding:6px 14px;font-size:0.82rem;">${pct === 0 ? "Start" : pct >= 100 ? "Review" : "Continue"}</button></a>
+                </td>
+            `;
+        });
+
+        // Activity feed
+        const actList = document.getElementById("activityList");
+        actList.innerHTML = "";
+        if (activity.length === 0) {
+            actList.innerHTML = `
+                <li style="list-style:none;border:none;padding-left:0;">
+                    <div class="empty-activity">
+                        <span>📖</span>
+                        No activity yet — start a course to see your progress here!
+                    </div>
+                </li>`;
+        } else {
+            activity.slice(-10).reverse().forEach(item => {
+                const li = document.createElement("li");
+                li.innerHTML = `<span>${item.text}</span><span class="activity-time">${item.time || ""}</span>`;
+                actList.appendChild(li);
+            });
+        }
+
+        // Show content
+        document.getElementById("dashboardContent").style.opacity = "1";
+    }
+
+    // ── Wait for auth.js to confirm auth state ─────────────────
+    document.addEventListener("devtutor:authReady", function (e) {
+        _dashFbUser = e.detail.fbUser;
+        // Hide loading overlay, reveal page
+        var overlay = document.getElementById("loadingOverlay");
+        if (overlay) overlay.style.display = "none";
+        document.body.style.visibility = "visible";
+
+        renderDashboard(e.detail.user);
+        setupEditProfile();
+        setupDownloadCert();
+    });
+
+    // Fallback: if redirecting to login (no user), also reveal body
+    // so the redirect visually clears
+    window.addEventListener("beforeunload", function () {
+        document.body.style.visibility = "visible";
+    });
+
+    // ── Edit Profile ───────────────────────────────────────────
+    function setupEditProfile() {
+        const modal      = document.getElementById("editProfileModal");
+        const editBtn    = document.getElementById("editProfileBtn");
+        const cancelBtn  = document.getElementById("cancelEditBtn");
+        const saveBtn    = document.getElementById("saveProfileBtn");
+        const modalError = document.getElementById("modalError");
+
+        editBtn.addEventListener("click", function () {
+            if (!_dashUser) return;
+            document.getElementById("editName").value           = _dashUser.name  || "";
+            document.getElementById("editEmail").value          = _dashUser.email || "";
+            document.getElementById("editCurrentPassword").value = "";
+            document.getElementById("editNewPassword").value     = "";
+            modalError.style.display = "none";
+            modal.classList.add("open");
+        });
+
+        cancelBtn.addEventListener("click", () => modal.classList.remove("open"));
+        modal.addEventListener("click",  (e) => { if (e.target === modal) modal.classList.remove("open"); });
+
+        saveBtn.addEventListener("click", async function () {
+            modalError.style.display = "none";
+            const newName   = document.getElementById("editName").value.trim();
+            const currentPw = document.getElementById("editCurrentPassword").value;
+            const newPw     = document.getElementById("editNewPassword").value;
+
+            if (!newName) {
+                modalError.textContent = "Name cannot be empty.";
+                modalError.style.display = "block";
+                return;
+            }
+            if (!currentPw) {
+                modalError.textContent = "Current password is required to save changes.";
+                modalError.style.display = "block";
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = "Saving…";
+
+            try {
+                // Re-authenticate with current password
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    _dashFbUser.email, currentPw
+                );
+                await _dashFbUser.reauthenticateWithCredential(credential);
+
+                // Update Firestore profile
+                const updates = { name: newName };
+                await firebase.firestore().collection("users").doc(_dashFbUser.uid).update(updates);
+
+                // Update Firebase Auth password if a new one was provided
+                if (newPw) {
+                    if (newPw.length < 6) {
+                        throw { code: "weak-password", message: "Password must be at least 6 characters." };
+                    }
+                    await _dashFbUser.updatePassword(newPw);
+                }
+
+                // Refresh local cache and re-render
+                _dashUser.name = newName;
+                modal.classList.remove("open");
+                renderDashboard(_dashUser);
+
+            } catch (err) {
+                var msg = "Failed to save changes. Please try again.";
+                if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+                    msg = "Current password is incorrect.";
+                } else if (err.code === "auth/weak-password" || err.code === "weak-password") {
+                    msg = err.message || "Password must be at least 6 characters.";
+                } else if (err.code === "auth/requires-recent-login") {
+                    msg = "Session expired. Please log out and log back in first.";
+                } else if (err.code === "auth/network-request-failed") {
+                    msg = "Network error. Check your connection.";
+                }
+                modalError.textContent = msg;
+                modalError.style.display = "block";
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = "Save Changes";
+            }
+        });
+    }
+
+    // ── Download Certificate ───────────────────────────────────
+    function setupDownloadCert() {
+        document.getElementById("downloadCertBtn").addEventListener("click", function () {
+            if (!_dashUser) return;
+            const cp     = _dashUser.courseProgress || {};
+            const earned = ALL_COURSES.filter(c => cp[c.key] >= 100);
+            if (earned.length === 0) {
+                alert("You haven't completed any courses yet. Finish a course to earn a certificate!");
+                return;
+            }
+            const certText = [
+                "=== DevTutor Certificate of Completion ===",
+                "",
+                "Name: " + _dashUser.name,
+                "Email: " + _dashUser.email,
+                "Member Since: " + _dashUser.joined,
+                "",
+                "Completed Courses:",
+                ...earned.map(c => "  ✔ " + c.label),
+                "",
+                "Issued: " + new Date().toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" }),
+                "",
+                "DevTutor | Learn Programming Anytime, Anywhere.",
+            ].join("\n");
+            const blob = new Blob([certText], { type: "text/plain" });
+            const a    = document.createElement("a");
+            a.href     = URL.createObjectURL(blob);
+            a.download = "DevTutor_Certificate.txt";
+            a.click();
+            URL.revokeObjectURL(a.href);
+        });
+    }
+    </script>
+
+</body>
+
+</html>

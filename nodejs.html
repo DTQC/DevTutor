@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Tutorial - DevTutor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1><a href="index.html">DevTutor</a></h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="tutorials.html">Tutorials</a> |
+            <a href="editor.html">Code Editor</a>
+        </nav>
+        <hr>
+    </header>
+    <!-- Layout -->
+    <table class="layout-table" width="100%" cellpadding="10">
+        <tr>
+            <!-- Sidebar -->
+            <td class="sidebar" width="22%" valign="top">
+                <h2>Node.js Tutorial</h2>
+                <hr>
+                <p><a href="#introduction">Introduction</a></p>
+                <p><a href="#setup">Setup</a></p>
+                <p><a href="#first-server">First Server</a></p>
+                <p><a href="#express-quickstart">Express Quick‑Start</a></p>
+                <p><a href="#exercise">Exercise</a></p>
+            </td>
+            <!-- Main Content -->
+            <td class="main-content" valign="top">
+                <h1>Node.js Tutorial</h1>
+                <section id="introduction">
+                    <h2>Introduction</h2>
+                    <p>Node.js allows you to run JavaScript on the server, enabling full‑stack development with a single language.</p>
+                </section>
+                <section id="setup">
+                    <h2>Setup</h2>
+                    <p>Download and install Node.js from <a href="https://nodejs.org" target="_blank">nodejs.org</a>. Verify the installation:</p>
+                    <pre><code>node -v
+npm -v</code></pre>
+                </section>
+                <section id="first-server">
+                    <h2>First Server (Vanilla Node)</h2>
+                    <p>Create a file <code>server.js</code> with the following code:</p>
+                    <pre><code>const http = require('http');
+const hostname = '127.0.0.1';
+const port = 3000;
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello from Node.js!');
+});
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
+</code></pre>
+                    <p>Run it with <code>node server.js</code> and open <a href="http://127.0.0.1:3000" target="_blank">http://127.0.0.1:3000</a> in a browser.</p>
+                </section>
+                <section id="express-quickstart">
+                    <h2>Express Quick‑Start</h2>
+                    <p>Express simplifies routing and middleware. Install it:</p>
+                    <pre><code>npm init -y
+npm install express</code></pre>
+                    <p>Create <code>app.js</code>:</p>
+                    <pre><code>const express = require('express');
+const app = express();
+const port = 3000;
+app.get('/', (req, res) => {
+  res.send('Hello from Express!');
+});
+app.listen(port, () => {
+  console.log(`Express app listening at http://localhost:${port}`);
+});
+</code></pre>
+                    <p>Run <code>node app.js</code> and visit the URL.</p>
+                </section>
+                <section id="exercise">
+                    <h2>Exercise</h2>
+                    <p>Build a tiny REST API with Express that supports CRUD operations for a list of books (in‑memory array). Include routes for <code>GET /books</code>, <code>POST /books</code>, <code>PUT /books/:id</code>, and <code>DELETE /books/:id</code>.</p>
+                </section>
+                <hr>
+                <button>Try It Yourself</button>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <footer align="center">
+        <h3>DevTutor</h3>
+        <p>Learn Coding Anywhere, Anytime.</p>
+        <p>© 2026 DevTutor. All Rights Reserved.</p>
+    </footer>
+    <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+        <div class="card" style="padding:24px;">
+            <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — Node.js</h2>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="progress-bar" style="flex:1; min-width:200px;"><div class="progress" id="nodeProgressBar" style="width:0%; transition:width 0.5s;"></div></div>
+                <span id="nodeProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+                <input type="range" id="nodeProgressSlider" min="0" max="100" step="5" value="0" style="width:160px; accent-color:#10b981; cursor:pointer;">
+                <button id="nodeMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+            </div>
+            <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">Drag the slider to update your progress, or click "Mark Complete" to finish this course.</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+            if (!user) return;
+            var widget = document.getElementById("courseProgressWidget"); widget.style.display = "block";
+            var bar = document.getElementById("nodeProgressBar"); var label = document.getElementById("nodeProgressLabel"); var slider = document.getElementById("nodeProgressSlider"); var markBtn = document.getElementById("nodeMarkComplete");
+            var saved = (user.courseProgress && user.courseProgress["nodejs"]) || 0;
+            slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+            slider.addEventListener("input", function () { var p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+            slider.addEventListener("change", function () { trackCourseProgress("nodejs", parseInt(this.value), "Node.js"); });
+            markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("nodejs", 100, "Node.js"); markBtn.textContent = "🎉 Completed!"; setTimeout(function() { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+        });
+    </script>
+</body>
+</html>

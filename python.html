@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Tutorial - DevTutor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">DevTutor</a></h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="tutorials.html">Tutorials</a> |
+            <a href="html.html">HTML</a> |
+            <a href="css.html">CSS</a> |
+            <a href="javascript.html">JavaScript</a> |
+            <a href="python.html">Python</a> |
+            <a href="php.html">PHP</a>
+        </nav>
+        <hr>
+    </header>
+    </table>
+    <hr>
+</body>
+</html>
+
+
+        <hr>
+    </header>
+    <table class="layout-table" width="100%" cellpadding="10">
+        <tr>
+            <!-- Sidebar -->
+            <td class="sidebar" width="22%" valign="top">
+                <h2>Python Tutorial</h2>
+                <hr>
+                <p><a href="#">Python Home</a></p>
+                <p><a href="#intro">Python Introduction</a></p>
+                <p><a href="#variables">Variables &amp; Data Types</a></p>
+                <p><a href="#control">Control Flow</a></p>
+                <p><a href="#functions">Functions &amp; Modules</a></p>
+                <p><a href="#io">File I/O</a></p>
+                <p><a href="#oop">Object‑Oriented Basics</a></p>
+            </td>
+            <!-- Main Content -->
+            <td class="main-content" valign="top">
+                <section id="intro">
+                    <h2>Python Tutorial</h2>
+                    <p>Python is a powerful, easy‑to‑learn programming language used for web development, data science, automation, and more.</p>
+                </section>
+                <section id="variables">
+                    <h3>What You Will Learn</h3>
+                    <ul>
+                        <li>Variables and data types</li>
+                        <li>Control flow (if, for, while)</li>
+                        <li>Functions and modules</li>
+                        <li>File I/O</li>
+                        <li>Basic object‑oriented programming</li>
+                    </ul>
+                </section>
+                <section id="example">
+                    <h3>Python Example</h3>
+                    <pre><code>def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("World"))</code></pre>
+                </section>
+                <br>
+                <table width="100%">
+
+                </table>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <footer align="center">
+        <h3>DevTutor</h3>
+        <p>Learn Python from Beginner to Advanced.</p>
+        <p>© 2026 DevTutor. All Rights Reserved.</p>
+    </footer>
+    <div id="courseProgressWidget" style="display:none; max-width:900px; margin:20px auto 40px; padding:0 24px;">
+        <div class="card" style="padding:24px;">
+            <h2 style="font-size:1.1rem; margin-bottom:16px;">📈 Your Progress — Python</h2>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="progress-bar" style="flex:1; min-width:200px;"><div class="progress" id="pyProgressBar" style="width:0%; transition:width 0.5s;"></div></div>
+                <span id="pyProgressLabel" style="font-size:0.9rem; color:var(--text-muted); width:38px;">0%</span>
+                <input type="range" id="pyProgressSlider" min="0" max="100" step="5" value="0" style="width:160px; accent-color:#10b981; cursor:pointer;">
+                <button id="pyMarkComplete" style="padding:8px 16px; font-size:0.85rem;">✅ Mark Complete</button>
+            </div>
+            <p style="margin-top:12px; margin-bottom:0; font-size:0.82rem; color:var(--text-muted);">Drag the slider to update your progress, or click "Mark Complete" to finish this course.</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var user = (typeof safeStorage !== "undefined") ? JSON.parse(safeStorage.getItem("currentUser") || "null") : null;
+            if (!user) return;
+            var widget = document.getElementById("courseProgressWidget"); widget.style.display = "block";
+            var bar = document.getElementById("pyProgressBar"); var label = document.getElementById("pyProgressLabel"); var slider = document.getElementById("pyProgressSlider"); var markBtn = document.getElementById("pyMarkComplete");
+            var saved = (user.courseProgress && user.courseProgress["python"]) || 0;
+            slider.value = saved; bar.style.width = saved + "%"; bar.textContent = saved > 0 ? saved + "%" : ""; label.textContent = saved + "%";
+            slider.addEventListener("input", function () { var p = parseInt(this.value); bar.style.width = p + "%"; bar.textContent = p > 0 ? p + "%" : ""; label.textContent = p + "%"; });
+            slider.addEventListener("change", function () { trackCourseProgress("python", parseInt(this.value), "Python"); });
+            markBtn.addEventListener("click", function () { slider.value = 100; bar.style.width = "100%"; bar.textContent = "100%"; label.textContent = "100%"; trackCourseProgress("python", 100, "Python"); markBtn.textContent = "🎉 Completed!"; setTimeout(function() { markBtn.textContent = "✅ Mark Complete"; }, 2500); });
+        });
+    </script>
+</body>
+</html>
